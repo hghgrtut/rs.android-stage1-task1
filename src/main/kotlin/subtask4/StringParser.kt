@@ -3,54 +3,28 @@ package subtask4
 class StringParser {
 
     fun getResult(inputString: String): Array<String> {
-        var k=0
         val n=inputString.length
-        var tempArray :Array<String> = Array(n){""}
-        for (i in 0 until n){
+        val tempList :MutableList<String> = mutableListOf()
+        for (i in inputString.indices){
             when {
-                inputString[i]=='(' -> {
-                    var tempString=StringBuilder()
-                    var ti=i+1
-                    var sch=0
-                    while(inputString[ti]!=')' || sch>0) {
-                        if (inputString[ti]=='(') sch++
-                        else if (inputString[ti]==')') sch--
-                        tempString.append(inputString[ti])
-                        ti++
-                    }
-                    tempArray[k]=tempString.toString()
-                    k++
-                }
-                inputString[i]=='[' -> {
-                    var tempString=StringBuilder()
-                    var ti=i+1
-                    var sch=0
-                    while(inputString[ti]!=']' || sch>0) {
-                        if (inputString[ti]=='[') sch++
-                        else if (inputString[ti]===']') sch--
-                        tempString.append(inputString[ti])
-                        ti++
-                    }
-                    tempArray[k]=tempString.toString()
-                    k++
-                }
-                inputString[i]=='<' -> {
-                    var tempString=StringBuilder()
-                    var ti=i+1
-                    var sch=0
-                    while(inputString[ti]!='>' || sch>0) {
-                        if (inputString[ti]=='<') sch++
-                        else if (inputString[ti]=='>') sch--
-                        tempString.append(inputString[ti])
-                        ti++
-                    }
-                    tempArray[k]=tempString.toString()
-                    k++
-                }
+                inputString[i] == '(' -> tempList.add(findSubstring(i, n, '(', ')', inputString))
+                inputString[i] == '[' -> tempList.add(findSubstring(i, n, '[', ']', inputString))
+                inputString[i] == '<' -> tempList.add(findSubstring(i, n, '<', '>', inputString))
             }
         }
-        var outputArray: Array<String> = Array(k){""}
-        for (i in outputArray.indices) outputArray[i]=tempArray[i]
-        return outputArray
+        return tempList.toTypedArray()
+    }
+
+    private fun findSubstring(i: Int, max: Int, openBrace: Char, closeBrace: Char, string: String): String{
+        var substring=""
+        var sch=0
+        var index=i+1
+        while(string[index]!=closeBrace || sch>0) {
+            if (string[index]==openBrace) sch++
+            else if (string[index]==closeBrace) sch--
+            substring+=string[index]
+            index++
+        }
+        return substring
     }
 }
